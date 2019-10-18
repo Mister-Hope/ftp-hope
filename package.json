@@ -1,0 +1,22 @@
+{
+  "name": "ftp-hope",
+  "version": "0.0.1",
+  "description": "node环境下的ftp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:Mr-Hope/ftp-hope.git"
+  },
+  "keywords": [
+    "ftp",
+    "node"
+  ],
+  "dependencies": {
+    "ftp": "^0.3.10"
+  },
+  "author": "Mr.Hope",
+  "license": "MIT"
+}
