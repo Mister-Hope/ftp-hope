@@ -1,10 +1,15 @@
 {
   "name": "ftp-hope",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "node环境下的ftp",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-listDir": "node tests/listDir.js",
+    "test-putFile": "node tests/putFile.js",
+    "test-putFolder": "node tests/putFolder.js",
+    "test-getFile": "node tests/getFile.js",
+    "test-getFolder": "node tests/getFolder.js"
   },
   "repository": {
     "type": "git",
@@ -12,11 +17,18 @@
   },
   "keywords": [
     "ftp",
-    "node"
+    "node",
+    "promise"
   ],
   "dependencies": {
     "ftp": "^0.3.10"
   },
   "author": "Mr.Hope",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "1.18.2"
+  }
 }
