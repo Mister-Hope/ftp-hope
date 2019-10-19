@@ -1,6 +1,6 @@
 {
   "name": "ftp-hope",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "node环境下的ftp",
   "main": "index.js",
   "scripts": {
