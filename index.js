@@ -5,7 +5,7 @@
  * @Author: Mr.Hope
  * @Date: 2019-08-31 13:26:57
  * @LastEditors: Mr.Hope
- * @LastEditTime: 2019-10-20 00:04:33
+ * @LastEditTime: 2019-10-20 00:22:16
  * @Description: FTP上传
  */
 
@@ -44,7 +44,7 @@ const pwd = () =>
         return reject(err);
       }
 
-      console.log(`当前目录为${currentpath}`);
+      console.log(`当前目录为 ${currentpath}`);
       return resolve(currentpath);
     });
   });
@@ -58,12 +58,12 @@ const cwd = (dirpath, ...args) =>
   new Promise((resolve, reject) => {
     client.cwd(dirpath, err => {
       if (err) {
-        console.error(`cwd: 切换到${dirpath}目录出错`, err);
+        console.error(`cwd: 切换到 ${dirpath} 目录出错`, err);
 
         return reject(err);
       }
 
-      console.log(`当前目录为${dirpath}`);
+      console.log(`当前目录为 ${dirpath}`);
       return resolve(...args);
     });
   });
@@ -88,7 +88,7 @@ const pathAction = (actionPath, action) =>
     // 切换目录
     return cwd(actionPath)
       .then(() => {
-        console.log(`切换到${actionPath}目录`);
+        console.log(`切换到 ${actionPath} 目录`);
 
         return new Promise(action);
       })
@@ -114,12 +114,12 @@ const listOnlineDir = dirpath =>
     // 列出目录信息
     client.list((err2, files) => {
       if (err2) {
-        console.error(`list: 列出${dirpath}目录出错`, err2);
+        console.error(`列出 ${dirpath} 目录出错:`, err2);
 
         return reject(err2);
       }
 
-      console.log('文件列表为:', files);
+      console.log(`列出 ${dirpath} 目录成功`, files.map(file => file.name));
 
       // 切换回当前目录
       return resolve(files);
@@ -135,14 +135,14 @@ const markDirExist = dirPath =>
   new Promise((resolve, reject) => {
     fs.readdir(dirPath, err => {
       if (err) {
-        console.log(`${dirPath}文件夹已存在`);
+        console.log(`${dirPath} 文件夹已存在`);
 
         return resolve();
       }
 
       return fs.mkdir(dirPath, { recursive: true }, err2 => {
         if (err2) {
-          console.error(`创建${dirPath}文件夹出错`, err2);
+          console.error(`创建 ${dirPath} 文件夹出错`, err2);
 
           return reject(err2);
         }
@@ -163,10 +163,10 @@ const markOnlineDirExist = (onlineDirPath, fast = true) =>
     if (fast)
       client.mkdir(onlineDirPath, true, err => {
         if (err) {
-          console.log(`${onlineDirPath}文件夹已存在`);
+          console.log(`${onlineDirPath} 文件夹已存在`);
           return resolve();
         }
-        console.log(`已创建${onlineDirPath}文件夹`);
+        console.log(`已创建 ${onlineDirPath} 文件夹`);
 
         return resolve();
       });
@@ -184,7 +184,7 @@ const markOnlineDirExist = (onlineDirPath, fast = true) =>
             .catch(() => {
               client.mkdir(onlineDirPath, err3 => {
                 if (err3) {
-                  console.log(`已尝试创建文件夹${onlineDirPath}`);
+                  console.log(`已尝试创建文件夹 ${onlineDirPath}`);
 
                   return resolve();
                 }
@@ -224,7 +224,7 @@ const getFile = (
 
             return resolve();
           }
-          console.error(`获取${onlineFilePath}失败`, err2);
+          console.error(`获取 ${onlineFilePath} 失败`, err2);
 
           return reject(err2);
         }
@@ -261,7 +261,7 @@ const getFile = (
 
             return resolve();
           }
-          console.error(`获取${onlineFilePath}失败`, err2);
+          console.error(`获取 ${onlineFilePath} 失败`, err2);
 
           return reject(err2);
         }
@@ -272,7 +272,7 @@ const getFile = (
         /** 写入文件 */
         rs.pipe(ws);
 
-        console.error(`获取${onlineFilePath}成功`);
+        console.error(`获取 ${onlineFilePath} 成功`);
 
         return resolve();
       });
@@ -306,12 +306,12 @@ const putFile = (
 
             return resolve();
           }
-          console.error(`上传${currentFile}到${targetFilePath}失败`, err2);
+          console.error(`上传 ${currentFile} 失败:`, err2);
 
           return reject(err2);
         }
 
-        console.log(`上传${currentFile}到${targetFilePath}成功`);
+        console.log(`上传 ${currentFile} 成功`);
 
         return resolve();
       });
@@ -328,12 +328,12 @@ const putFile = (
     pathAction(dirpath, (resolve, reject) => {
       client.put(rs, fileName, err2 => {
         if (err2) {
-          console.error(`上传${currentFile}到${targetFilePath}失败`, err2);
+          console.error(`上传 ${currentFile} 失败:`, err2);
 
           return reject(err2);
         }
 
-        console.log(`上传${currentFile}到${targetFilePath}成功`);
+        console.log(`上传 ${currentFile} 成功`);
 
         return resolve();
       });
@@ -349,39 +349,44 @@ const putFile = (
  */
 const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
   pathAction(onlineDirectory, resolve => {
-    console.log('切换到', onlineDirectory, '开始获取文件夹');
     // 列出当前目录
     return listOnlineDir('./').then(files => {
       const promises = [];
 
-      console.log('开始获取文件');
+      console.log(`开始获取 ${onlineDirectory} 目录文件`);
       files.forEach(file => {
         // 获取每一个文件
         if (file.type === '-')
           promises.push(
-            getFile(`./${file.name}`, `${localDirectory}/${file.name}`)
+            getFile(`./${file.name}`, `${localDirectory}/${file.name}`, true)
           );
       });
 
       // 已经获取所有的文件
-      return Promise.all(promises).then(async () => {
-        console.log('开始获取文件夹');
-        // 开始获取所有文件夹
-        for (let index = 0; index < files.length; index++) {
-          const file = files[index];
+      return Promise.all(promises)
+        .then(async () => {
+          console.log(`开始获取 ${onlineDirectory} 目录文件夹`);
+          // 开始获取所有文件夹
+          for (let index = 0; index < files.length; index++) {
+            const file = files[index];
 
-          // 依次获取每一个文件夹
-          if (file.type === 'd' && file.name !== '.' && file.name !== '..') {
-            console.log(`开始获取${onlineDirectory}/${file.name}文件夹`);
-            // eslint-disable-next-line no-await-in-loop
-            await getFolder(`./${file.name}`, `${localDirectory}/${file.name}`);
+            // 依次获取每一个文件夹
+            if (file.type === 'd' && file.name !== '.' && file.name !== '..')
+              // eslint-disable-next-line no-await-in-loop
+              await getFolder(
+                `./${file.name}`,
+                `${localDirectory}/${file.name}`
+              );
           }
-        }
 
-        console.log('获取文件夹完成');
+          console.log(`获取 ${onlineDirectory} 完成`);
 
-        return resolve();
-      });
+          return resolve();
+        })
+        .catch(err => {
+          console.log(`获取 ${onlineDirectory} 出错:`, err);
+          resolve();
+        });
     });
   });
 
@@ -392,7 +397,7 @@ const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
  * @param {string} onlineDirectory 在线地址
  */
 const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
-  console.log(`开始上传 ${onlineDirectory} 文件夹`);
+  console.log(`开始上传 ${onlineDirectory} 目录文件`);
 
   // 确保在线目录存在
   return markOnlineDirExist(onlineDirectory).then(() => {
@@ -410,14 +415,13 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
           // 是文件
           if (file.isFile())
             promises.push(
-              putFile(`${localDirectory}/${file.name}`, `./${file.name}`)
+              putFile(`${localDirectory}/${file.name}`, `./${file.name}`, true)
             );
         });
 
         return Promise.all(promises)
           .then(async () => {
-            console.log(`${onlineDirectory}文件上传完成`);
-            console.log(`开始处理${onlineDirectory}文件夹`);
+            console.log(`开始上传 ${onlineDirectory} 目录文件夹`);
             for (let index = 0; index < files.length; index++) {
               const file = files[index];
 
@@ -430,11 +434,14 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
                 );
             }
 
-            console.log(`${onlineDirectory}上传全部完成`);
+            console.log(`${onlineDirectory} 上传完成`);
 
             return resolve();
           })
-          .catch(err3 => reject(err3));
+          .catch(err => {
+            console.log(`上传 ${onlineDirectory} 出错:`, err);
+            resolve();
+          });
       });
     });
   });
