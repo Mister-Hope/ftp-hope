@@ -1,16 +1,23 @@
+# 阻止eslint读取父目录或总配置文件的规则
 root: true
 
+# 代码环境
 env:
-  node: true
+  browser: true
+  commonjs: true
   es6: true
+  node: true
 
+# 所使用的规则配置
 extends:
   - eslint:all
   - plugin:prettier/recommended
 
+# 插件
 plugins:
   - prettier
 
+# 解析器选项
 parserOptions:
   "ecmaVersion": 2018
 
@@ -39,12 +46,27 @@ rules:
     - error
     - multi
 
+  global-require:
+    - off
+
+  id-length:
+    - error
+    - min: 2
+      exceptions:
+        - e
+        - h
+        - i
+        - x
+        - y
+
   implicit-arrow-linebreak:
     - off
 
   indent:
     - error
     - 2
+    - SwitchCase: 1
+      flatTernaryExpressions: true
 
   init-declarations:
     - off
@@ -53,9 +75,22 @@ rules:
     - error
     - consistent
 
+  line-comment-position:
+    - off
+
   nonblock-statement-body-position:
     - error
     - any
+
+  no-inline-comments:
+    - off
+
+  no-magic-numbers:
+    - off
+
+  no-nested-ternary:
+    - off
+
   no-param-reassign:
     - error
     - props: false
@@ -64,18 +99,8 @@ rules:
     - error
     - allowForLoopAfterthoughts: true
 
-  object-curly-newline:
-    - error
-    - ExportDeclaration:
-        multiline: true
-        minProperties: 3
-      ImportDeclaration:
-        multiline: true
-        minProperties: 5
-      ObjectExpression:
-        multiline: true
-      ObjectPattern:
-        multiline: true
+  no-ternary:
+    - off
 
   object-curly-spacing: "off"
 
@@ -87,13 +112,27 @@ rules:
     - error
     - never
 
+  prefer-destructuring:
+    - error
+    - object: true
+      array: false
+
+  prefer-named-capture-group:
+    - off
+
   quotes:
     - error
     - single
-  
-  strict:
+
+  radix:
+    - error
+    - as-needed
+
+  sort-keys:
     - off
 
+  strict:
+    - off
   # 暂时禁用的自定义规则
   # 'array-element-newline': ['error', 'consistent']
   # 防止因为自动换行造成的报错
