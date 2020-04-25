@@ -101,13 +101,13 @@ const getFile = (
  * @param {string} localDirectory 文件地址
  */
 const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
-  pathAction(onlineDirectory, resolve => {
+  pathAction(onlineDirectory, (resolve) => {
     // 列出当前目录
-    return listOnlineDir('./').then(files => {
+    return listOnlineDir('./').then((files) => {
       const promises = [];
 
       console.log(`开始获取 ${onlineDirectory} 目录文件`);
-      files.forEach(file => {
+      files.forEach((file) => {
         // 获取每一个文件
         if (file.type === '-')
           promises.push(
@@ -136,7 +136,7 @@ const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
 
           return resolve();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(`获取 ${onlineDirectory} 出错:`, err);
           resolve();
         });

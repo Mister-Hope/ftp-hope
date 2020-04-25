@@ -5,23 +5,23 @@ install: npm ci
 jobs:
   include:
     - stage: test
-      name: "Test"
+      name: 'Test'
       script:
         - npm run test
 
     - stage: test-dir
-      name: "Test Dir function"
+      name: 'Test Dir function'
       script:
         - npm run test-listDir
 
     - stage: test-put
-      name: "Test Put function"
+      name: 'Test Put function'
       script:
         - npm run test-putFile
         - npm run test-putFolder
 
     - stage: test-get
-      name: "Test Get function"
+      name: 'Test Get function'
       script:
         - npm run test-getFile
         - npm run test-getFolder

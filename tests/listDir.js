@@ -5,7 +5,7 @@ const { client, listOnlineDir } = require('..');
 client.connect(require('./loginDetail'));
 
 client.on('ready', () => {
-  listOnlineDir('./').then(files => {
+  listOnlineDir('./').then((files) => {
     console.log(files);
     client.end();
   });

@@ -32,7 +32,7 @@ const putFile = (
 
   if (correctpath)
     return new Promise((resolve, reject) => {
-      client.put(rs, targetFilePath, err2 => {
+      client.put(rs, targetFilePath, (err2) => {
         if (err2) {
           if (err2.message === 'Unable to make data connection') {
             console.log('未知获取错误');
@@ -59,7 +59,7 @@ const putFile = (
   // 确保在线目录存在
   return markOnlineDirExist(dirpath).then(() =>
     pathAction(dirpath, (resolve, reject) => {
-      client.put(rs, fileName, err2 => {
+      client.put(rs, fileName, (err2) => {
         if (err2) {
           console.error(`上传 ${currentFile} 失败:`, err2);
 
@@ -95,7 +95,7 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
 
         const promises = [];
 
-        files.forEach(file => {
+        files.forEach((file) => {
           // 是文件
           if (file.isFile())
             promises.push(
@@ -122,7 +122,7 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
 
             return resolve();
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(`上传 ${onlineDirectory} 出错:`, err);
             resolve();
           });

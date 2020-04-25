@@ -31,7 +31,7 @@ const pwd = () =>
  */
 const cwd = (dirpath, ...args) =>
   new Promise((resolve, reject) => {
-    client.cwd(dirpath, err => {
+    client.cwd(dirpath, (err) => {
       if (err) {
         console.error(`cwd: 切换到 ${dirpath} 目录出错`, err);
 
@@ -51,7 +51,7 @@ const cwd = (dirpath, ...args) =>
  */
 const pathAction = (actionPath, action) =>
   // 读取当前目录
-  pwd().then(currentpath => {
+  pwd().then((currentpath) => {
     console.log(`当前目录为${currentpath}`);
 
     if (actionPath === currentpath) {
@@ -84,7 +84,7 @@ const pathAction = (actionPath, action) =>
  *
  * @param {string} dirpath 文件夹目录
  */
-const listOnlineDir = dirpath =>
+const listOnlineDir = (dirpath) =>
   pathAction(dirpath, (resolve, reject) => {
     // 列出目录信息
     client.list((err2, files) => {
@@ -94,7 +94,10 @@ const listOnlineDir = dirpath =>
         return reject(err2);
       }
 
-      console.log(`列出 ${dirpath} 目录成功`, files.map(file => file.name));
+      console.log(
+        `列出 ${dirpath} 目录成功`,
+        files.map((file) => file.name)
+      );
 
       // 切换回当前目录
       return resolve(files);
@@ -106,16 +109,16 @@ const listOnlineDir = dirpath =>
  *
  * @param {string} dirPath 确认存在的文件夹路径
  */
-const markDirExist = dirPath =>
+const markDirExist = (dirPath) =>
   new Promise((resolve, reject) => {
-    fs.readdir(dirPath, err => {
+    fs.readdir(dirPath, (err) => {
       if (err) {
         console.log(`${dirPath} 文件夹已存在`);
 
         return resolve();
       }
 
-      return fs.mkdir(dirPath, { recursive: true }, err2 => {
+      return fs.mkdir(dirPath, { recursive: true }, (err2) => {
         if (err2) {
           console.error(`创建 ${dirPath} 文件夹出错`, err2);
 
@@ -136,7 +139,7 @@ const markDirExist = dirPath =>
 const markOnlineDirExist = (onlineDirPath, fast = true) =>
   new Promise((resolve, reject) => {
     if (fast)
-      client.mkdir(onlineDirPath, true, err => {
+      client.mkdir(onlineDirPath, true, (err) => {
         if (err) {
           console.log(`${onlineDirPath} 文件夹已存在`);
           return resolve();
@@ -147,17 +150,17 @@ const markOnlineDirExist = (onlineDirPath, fast = true) =>
       });
     else
       pwd()
-        .then(currentpath => {
+        .then((currentpath) => {
           cwd(onlineDirPath)
             .then(() => {
               cwd(currentpath)
                 .then(() => {
                   resolve();
                 })
-                .catch(err2 => reject(err2));
+                .catch((err2) => reject(err2));
             })
             .catch(() => {
-              client.mkdir(onlineDirPath, err3 => {
+              client.mkdir(onlineDirPath, (err3) => {
                 if (err3) {
                   console.log(`已尝试创建文件夹 ${onlineDirPath}`);
 
@@ -168,11 +171,11 @@ const markOnlineDirExist = (onlineDirPath, fast = true) =>
                   .then(() => {
                     resolve();
                   })
-                  .catch(err2 => reject(err2));
+                  .catch((err2) => reject(err2));
               });
             });
         })
-        .catch(err => reject(err));
+        .catch((err) => reject(err));
   });
 
 module.exports = {

@@ -13,7 +13,7 @@ const FtpClient = require('ftp');
 const client = new FtpClient();
 
 /** 会话成功消息 */
-client.on('greeting', msg => {
+client.on('greeting', (msg) => {
   console.log('ftp client says', msg);
 });
 
@@ -30,7 +30,7 @@ client.on('end', () => {
   console.log('FTP client has ended');
 });
 
-client.on('error', err => {
+client.on('error', (err) => {
   console.error('FTP client has an error :', err);
 });
 

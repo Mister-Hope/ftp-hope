@@ -1,35 +1,29 @@
-# 阻止eslint读取父目录或总配置文件的规则
 root: true
 
-# 代码环境
 env:
-  browser: true
   commonjs: true
   es6: true
   node: true
 
-# 所使用的规则配置
 extends:
   - eslint:all
   - plugin:prettier/recommended
 
-# 插件
 plugins:
   - prettier
-
-# 解析器选项
 parserOptions:
-  "ecmaVersion": 2018
+  'ecmaVersion': 2018
 
 rules:
-  prettier/prettier: error
+  no-console: 'off'
 
-  # 自定义
-  arrow-parens:
-    - error
-    - as-needed
+  no-debugger: 'off'
 
-  # 'brace-style': ['error', '1tbs', { allowSingleLine: true }]
+  no-useless-constructor:
+    - off
+
+  class-methods-use-this:
+    - off
 
   comma-dangle:
     - error
@@ -63,10 +57,10 @@ rules:
     - off
 
   indent:
-    - error
+    - off
     - 2
-    - SwitchCase: 1
-      flatTernaryExpressions: true
+    - ignoredNodes:
+        - ConditionalExpression
 
   init-declarations:
     - off
@@ -76,6 +70,13 @@ rules:
     - consistent
 
   line-comment-position:
+    - off
+
+  max-statements:
+    - warn
+    - 25
+
+  new-cap:
     - off
 
   nonblock-statement-body-position:
@@ -99,10 +100,26 @@ rules:
     - error
     - allowForLoopAfterthoughts: true
 
+  no-process-env:
+    - off
+
+  no-sync:
+    - off
+
   no-ternary:
     - off
 
-  object-curly-spacing: "off"
+  no-undefined:
+    - off
+
+  no-unused-vars:
+    - off
+
+  no-warning-comments:
+    - warn
+
+  object-curly-spacing:
+    - off
 
   one-var:
     - error
@@ -133,9 +150,3 @@ rules:
 
   strict:
     - off
-  # 暂时禁用的自定义规则
-  # 'array-element-newline': ['error', 'consistent']
-  # 防止因为自动换行造成的报错
-  # 'implicit-arrow-linebreak': ['off', 'beside']
-  # 简化代码，忽略迷惑的箭头函数提示
-  # 'no-confusing-arrow': 'off'
