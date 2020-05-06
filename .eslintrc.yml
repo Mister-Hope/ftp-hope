@@ -150,3 +150,25 @@ rules:
 
   strict:
     - off
+
+overrides:
+  - files:
+      - "*.ts"
+
+    extends:
+      - plugin:@typescript-eslint/eslint-recommended
+      - plugin:@typescript-eslint/recommended
+      - prettier/@typescript-eslint
+
+    plugins:
+      - "@typescript-eslint"
+
+    parserOptions:
+      parser: "@typescript-eslint/parser"
+
+    rules:
+      "@typescript-eslint/explicit-function-return-type":
+        - warn
+        - allowTypedFunctionExpressions: true
+
+      "@typescript-eslint/no-explicit-any": off

@@ -1,17 +1,9 @@
-/* eslint-disable no-console */
-/*
- * @Author: Mr.Hope
- * @Date: 2019-10-20 00:33:38
- * @LastEditors: Mr.Hope
- * @LastEditTime: 2019-10-20 00:39:01
- * @Description: FTP 目录相关
- */
-
-const client = require('./ftp-client');
-const fs = require('fs');
+import Client from 'ftp';
+import client from './ftp-client';
+import fs from 'fs';
 
 /** 读取当前路径 */
-const pwd = () =>
+export const pwd = (): Promise<string> =>
   new Promise((resolve, reject) => {
     client.pwd((err, currentpath) => {
       if (err) {
@@ -29,7 +21,7 @@ const pwd = () =>
  *
  * @param {string} dirpath 文件夹目录
  */
-const cwd = (dirpath, ...args) =>
+export const cwd = (dirpath: string): Promise<void> =>
   new Promise((resolve, reject) => {
     client.cwd(dirpath, (err) => {
       if (err) {
@@ -39,17 +31,23 @@ const cwd = (dirpath, ...args) =>
       }
 
       console.log(`当前目录为 ${dirpath}`);
-      return resolve(...args);
+      return resolve();
     });
   });
 
 /**
  * 在某个目录下目录，进行某些操作
  *
- * @param {string} actionPath 需要切换到的路径
+ * @param actionPath 需要切换到的路径
  * @param {any} action 需要进行的行为
  */
-const pathAction = (actionPath, action) =>
+export const pathAction = <T = void>(
+  actionPath: string,
+  action: (
+    resolve: (value?: T | PromiseLike<T>) => void,
+    reject: (reason?: any) => void
+  ) => void
+): Promise<T> =>
   // 读取当前目录
   pwd().then((currentpath) => {
     console.log(`当前目录为${currentpath}`);
@@ -61,30 +59,33 @@ const pathAction = (actionPath, action) =>
     }
 
     // 切换目录
-    return cwd(actionPath)
-      .then(() => {
+    return new Promise((resolve, reject) =>
+      cwd(actionPath).then(() => {
         console.log(`切换到 ${actionPath} 目录`);
 
-        return new Promise(action);
-      })
-      .then((...args) => {
-        // 切换回当前目录
-        console.log('任务完成');
-        return cwd(currentpath, ...args);
-      })
-      .catch(() => {
-        console.warn('任务失败，尝试切换回源目录');
+        return new Promise(action)
+          .then((...args) => {
+            // 切换回当前目录
+            console.log('任务完成');
+            return cwd(currentpath).then(() => resolve(...args));
+          })
+          .catch((err) => {
+            console.warn('任务失败，尝试切换回源目录');
 
-        return cwd(currentpath);
-      });
+            return cwd(currentpath).then(() => reject(err));
+          });
+      })
+    );
   });
 
 /**
  * 列出目标目录详情
  *
- * @param {string} dirpath 文件夹目录
+ * @param dirpath 文件夹目录
  */
-const listOnlineDir = (dirpath) =>
+export const listOnlineDir = (
+  dirpath: string
+): Promise<Client.ListingElement[]> =>
   pathAction(dirpath, (resolve, reject) => {
     // 列出目录信息
     client.list((err2, files) => {
@@ -107,9 +108,9 @@ const listOnlineDir = (dirpath) =>
 /**
  * 确认某个文件夹存在，如果不存在则创建它
  *
- * @param {string} dirPath 确认存在的文件夹路径
+ * @param dirPath 确认存在的文件夹路径
  */
-const markDirExist = (dirPath) =>
+export const markDirExist = (dirPath: string): Promise<void> =>
   new Promise((resolve, reject) => {
     fs.readdir(dirPath, (err) => {
       if (err) {
@@ -133,10 +134,13 @@ const markDirExist = (dirPath) =>
 /**
  * 确保在线目录存在
  *
- * @param {string} onlineDirPath 在线文件夹目录
- * @param {boolean} fast 快速操作
+ * @param onlineDirPath 在线文件夹目录
+ * @param fast 快速操作
  */
-const markOnlineDirExist = (onlineDirPath, fast = true) =>
+export const markOnlineDirExist = (
+  onlineDirPath: string,
+  fast = true
+): Promise<void> =>
   new Promise((resolve, reject) => {
     if (fast)
       client.mkdir(onlineDirPath, true, (err) => {
@@ -177,12 +181,3 @@ const markOnlineDirExist = (onlineDirPath, fast = true) =>
         })
         .catch((err) => reject(err));
   });
-
-module.exports = {
-  cwd,
-  listOnlineDir,
-  markDirExist,
-  markOnlineDirExist,
-  pathAction,
-  pwd
-};

@@ -1,13 +1,4 @@
-/* eslint-disable no-console */
-/*
- * @Author: Mr.Hope
- * @Date: 2019-10-20 00:31:49
- * @LastEditors: Mr.Hope
- * @LastEditTime: 2019-10-20 00:32:38
- * @Description: FTP 客户端
- */
-
-const FtpClient = require('ftp');
+import FtpClient from 'ftp';
 
 /** ftp 客户端实例 */
 const client = new FtpClient();
@@ -34,4 +25,4 @@ client.on('error', (err) => {
   console.error('FTP client has an error :', err);
 });
 
-module.exports = client;
+export default client;

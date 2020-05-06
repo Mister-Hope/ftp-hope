@@ -1,30 +1,21 @@
-/* eslint-disable no-console */
-/*
- * @Author: Mr.Hope
- * @Date: 2019-10-20 00:36:37
- * @LastEditors: Mr.Hope
- * @LastEditTime: 2019-10-20 00:38:41
- * @Description: FTP 上传相关
- */
-
-const fs = require('fs');
-const path = require('path');
-const client = require('./ftp-client');
-const { pathAction, markOnlineDirExist } = require('./ftp-dir');
+import { markOnlineDirExist, pathAction } from './ftp-dir';
+import client from './ftp-client';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * 上传文件到指定地址
  *
- * @param {string} currentFile 当前文件路径
- * @param {string} targetFilePath 目标文件路径
- * @param {boolean} correctpath 是否已经切换到当前路径
+ * @param currentFile 当前文件路径
+ * @param targetFilePath 目标文件路径
+ * @param correctpath 是否已经切换到当前路径
  */
 // eslint-disable-next-line max-lines-per-function
-const putFile = (
-  currentFile,
+export const putFile = (
+  currentFile: string,
   targetFilePath = currentFile,
   correctpath = false
-) => {
+): Promise<void> => {
   console.log(`开始上传${targetFilePath}`);
 
   /** 创建 ReadStream */
@@ -77,10 +68,14 @@ const putFile = (
 /**
  * 上传文件夹
  *
- * @param {string} localDirectory 文件地址
- * @param {string} onlineDirectory 在线地址
+ * @param localDirectory 文件地址
+ * @param onlineDirectory 在线地址
  */
-const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
+// eslint-disable-next-line max-lines-per-function
+export const putFolder = (
+  localDirectory = './',
+  onlineDirectory = localDirectory
+): Promise<void> => {
   console.log(`开始上传 ${onlineDirectory} 目录文件`);
 
   // 确保在线目录存在
@@ -93,7 +88,7 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
           return reject(err2);
         }
 
-        const promises = [];
+        const promises: Promise<void>[] = [];
 
         files.forEach((file) => {
           // 是文件
@@ -129,9 +124,4 @@ const putFolder = (localDirectory = './', onlineDirectory = localDirectory) => {
       });
     });
   });
-};
-
-module.exports = {
-  putFile,
-  putFolder
 };

@@ -1,30 +1,21 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable no-console */
-/*
- * @Author: Mr.Hope
- * @Date: 2019-10-20 00:39:58
- * @LastEditors: Mr.Hope
- * @LastEditTime: 2019-10-20 00:41:44
- * @Description: FTP 下载模块
- */
-
-const fs = require('fs');
-const path = require('path');
-const client = require('./ftp-client');
-const { pathAction, markDirExist, listOnlineDir } = require('./ftp-dir');
+import { listOnlineDir, markDirExist, pathAction } from './ftp-dir';
+import client from './ftp-client';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * 从指定目录下载文件
  *
- * @param {string} onlineFilePath 在线文件地址
- * @param {string} localFilePath 本地文件地址
- * @param {boolean} correctpath 是否已经切换到当前路径
+ * @param onlineFilePath 在线文件地址
+ * @param localFilePath 本地文件地址
+ * @param correctpath 是否已经切换到当前路径
  */
-const getFile = (
-  onlineFilePath,
+export const getFile = (
+  onlineFilePath: string,
   localFilePath = onlineFilePath,
   correctpath = false
-) => {
+): Promise<void> => {
   console.log(`开始获取${onlineFilePath}`);
 
   if (correctpath)
@@ -85,7 +76,6 @@ const getFile = (
         /** 写入文件 */
         rs.pipe(ws);
 
-        // eslint-disable-next-line no-console
         console.error(`获取 ${onlineFilePath} 成功`);
 
         return resolve();
@@ -97,14 +87,17 @@ const getFile = (
 /**
  * 下载文件夹
  *
- * @param {string} onlineDirectory 在线地址
- * @param {string} localDirectory 文件地址
+ * @param onlineDirectory 在线地址
+ * @param localDirectory 文件地址
  */
-const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
+export const getFolder = (
+  onlineDirectory = './',
+  localDirectory = onlineDirectory
+): Promise<void> =>
   pathAction(onlineDirectory, (resolve) => {
     // 列出当前目录
     return listOnlineDir('./').then((files) => {
-      const promises = [];
+      const promises: Promise<void>[] = [];
 
       console.log(`开始获取 ${onlineDirectory} 目录文件`);
       files.forEach((file) => {
@@ -142,8 +135,3 @@ const getFolder = (onlineDirectory = './', localDirectory = onlineDirectory) =>
         });
     });
   });
-
-module.exports = {
-  getFile,
-  getFolder
-};
