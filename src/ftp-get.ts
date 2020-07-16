@@ -1,8 +1,8 @@
 /* eslint-disable max-lines-per-function */
-import { listOnlineDir, markDirExist, pathAction } from './ftp-dir';
-import client from './ftp-client';
-import fs from 'fs';
-import path from 'path';
+import { listOnlineDir, markDirExist, pathAction } from "./ftp-dir";
+import client from "./ftp-client";
+import fs from "fs";
+import path from "path";
 
 /**
  * 从指定目录下载文件
@@ -23,8 +23,8 @@ export const getFile = (
       // 获取文件
       client.get(onlineFilePath, (err2, rs) => {
         if (err2) {
-          if (err2.message === 'Unable to make data connection') {
-            console.log('未知获取错误');
+          if (err2.message === "Unable to make data connection") {
+            console.log("未知获取错误");
 
             return resolve();
           }
@@ -60,8 +60,8 @@ export const getFile = (
       // 获取文件
       client.get(onlineFileName, (err2, rs) => {
         if (err2) {
-          if (err2.message === 'Unable to make data connection') {
-            console.log('未知获取错误');
+          if (err2.message === "Unable to make data connection") {
+            console.log("未知获取错误");
 
             return resolve();
           }
@@ -91,18 +91,18 @@ export const getFile = (
  * @param localDirectory 文件地址
  */
 export const getFolder = (
-  onlineDirectory = './',
+  onlineDirectory = "./",
   localDirectory = onlineDirectory
 ): Promise<void> =>
   pathAction(onlineDirectory, (resolve) => {
     // 列出当前目录
-    return listOnlineDir('./').then((files) => {
+    return listOnlineDir("./").then((files) => {
       const promises: Promise<void>[] = [];
 
       console.log(`开始获取 ${onlineDirectory} 目录文件`);
       files.forEach((file) => {
         // 获取每一个文件
-        if (file.type === '-')
+        if (file.type === "-")
           promises.push(
             getFile(`./${file.name}`, `${localDirectory}/${file.name}`, true)
           );
@@ -117,7 +117,7 @@ export const getFolder = (
             const file = files[index];
 
             // 依次获取每一个文件夹
-            if (file.type === 'd' && file.name !== '.' && file.name !== '..')
+            if (file.type === "d" && file.name !== "." && file.name !== "..")
               // eslint-disable-next-line no-await-in-loop
               await getFolder(
                 `./${file.name}`,

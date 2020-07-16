@@ -1,33 +1,19 @@
 root: true
 
 env:
-  commonjs: true
   es6: true
   node: true
 
 extends:
-  - eslint:all
+  - eslint:recommended
   - plugin:prettier/recommended
 
 plugins:
   - prettier
-parserOptions:
-  'ecmaVersion': 2018
 
 rules:
-  no-console: 'off'
-
-  no-debugger: 'off'
-
-  no-useless-constructor:
-    - off
-
-  class-methods-use-this:
-    - off
-
   comma-dangle:
-    - error
-    - never
+    - off
 
   complexity:
     - warn
@@ -40,16 +26,22 @@ rules:
     - error
     - multi
 
+  function-call-argument-newline:
+    - error
+    - consistent
+
   global-require:
+    - off
+
+  guard-for-in:
     - off
 
   id-length:
     - error
     - min: 2
       exceptions:
-        - e
-        - h
         - i
+        - j
         - x
         - y
 
@@ -58,19 +50,20 @@ rules:
 
   indent:
     - off
-    - 2
-    - ignoredNodes:
-        - ConditionalExpression
 
   init-declarations:
     - off
 
-  function-call-argument-newline:
-    - error
-    - consistent
-
   line-comment-position:
     - off
+
+  max-lines:
+    - warn
+    - 500
+
+  max-lines-per-function:
+    - warn
+    - 80
 
   max-statements:
     - warn
@@ -83,10 +76,19 @@ rules:
     - error
     - any
 
+  no-console:
+    - off
+
+  no-debugger:
+    - off
+
   no-inline-comments:
     - off
 
   no-magic-numbers:
+    - off
+
+  no-multi-assign:
     - off
 
   no-nested-ternary:
@@ -100,14 +102,15 @@ rules:
     - error
     - allowForLoopAfterthoughts: true
 
-  no-process-env:
-    - off
-
   no-sync:
     - off
 
   no-ternary:
     - off
+
+  no-underscore-dangle:
+    - error
+    - allowAfterThis: true
 
   no-undefined:
     - off
@@ -121,35 +124,10 @@ rules:
   object-curly-spacing:
     - off
 
-  one-var:
-    - error
-    - never
-
-  padded-blocks:
-    - error
-    - never
-
   prefer-destructuring:
     - error
     - object: true
       array: false
-
-  prefer-named-capture-group:
-    - off
-
-  quotes:
-    - error
-    - single
-
-  radix:
-    - error
-    - as-needed
-
-  sort-keys:
-    - off
-
-  strict:
-    - off
 
 overrides:
   - files:
@@ -165,10 +143,52 @@ overrides:
 
     parserOptions:
       parser: "@typescript-eslint/parser"
+      project:
+        - "./tsconfig.json"
 
     rules:
       "@typescript-eslint/explicit-function-return-type":
         - warn
         - allowTypedFunctionExpressions: true
 
-      "@typescript-eslint/no-explicit-any": off
+      "@typescript-eslint/naming-convention":
+        - warn
+        - selector: default
+          format:
+            - camelCase
+          leadingUnderscore: allow
+          trailingUnderscore: allow
+
+        - selector: variable
+          format:
+            - camelCase
+            - UPPER_CASE
+          leadingUnderscore: allow
+          trailingUnderscore: allow
+
+        - selector: typeLike
+          format:
+            - PascalCase
+
+      "@typescript-eslint/no-explicit-any":
+        - off
+        # - warn
+        # - ignoreRestArgs: true
+
+      "@typescript-eslint/no-unsafe-member-access":
+        - off
+        # - warn
+
+  - files:
+      - "**/test/**/*.spec.js"
+      - "**/test/**/*.spec.ts"
+      - "**/test/**/*.test.js"
+      - "**/test/**/*.test.ts"
+
+    env:
+      mocha: true
+      node: true
+
+    rules:
+      id-length: "off"
+      max-lines-per-function: "off"

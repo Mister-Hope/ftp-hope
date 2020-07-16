@@ -1,13 +1,14 @@
 {
   "name": "ftp-hope",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A ftp client with typescript support under node environment",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "ts:compile": "tsc",
     "ts:watch": "tsc --watch",
-    "lint": "prettier --check --write .",
+    "lint": "eslint --fix --ext .ts . && prettier --check --write .",
+    "lint:check": "eslint --ext .ts . && prettier --check .",
     "test": "node tests/index.js",
     "test-listDir": "node tests/listDir.js",
     "test-putFile": "node tests/putFile.js",
@@ -25,12 +26,12 @@
     "promise"
   ],
   "dependencies": {
+    "@types/ftp": "^0.3.31",
     "ftp": "^0.3.10"
   },
   "author": "Mr.Hope",
   "license": "MIT",
   "devDependencies": {
-    "@types/ftp": "^0.3.31",
     "@typescript-eslint/eslint-plugin": "3.6.1",
     "@typescript-eslint/parser": "3.6.1",
     "eslint": "^7.4.0",

@@ -4,10 +4,10 @@ import {
   markDirExist,
   markOnlineDirExist,
   pwd
-} from './ftp-dir';
-import { getFile, getFolder } from './ftp-get';
-import { putFile, putFolder } from './ftp-put';
-import client from './ftp-client';
+} from "./ftp-dir";
+import { getFile, getFolder } from "./ftp-get";
+import { putFile, putFolder } from "./ftp-put";
+import client from "./ftp-client";
 
 export = {
   client,

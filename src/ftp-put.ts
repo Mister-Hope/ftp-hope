@@ -1,7 +1,7 @@
-import { markOnlineDirExist, pathAction } from './ftp-dir';
-import client from './ftp-client';
-import fs from 'fs';
-import path from 'path';
+import { markOnlineDirExist, pathAction } from "./ftp-dir";
+import client from "./ftp-client";
+import fs from "fs";
+import path from "path";
 
 /**
  * 上传文件到指定地址
@@ -25,8 +25,8 @@ export const putFile = (
     return new Promise((resolve, reject) => {
       client.put(rs, targetFilePath, (err2) => {
         if (err2) {
-          if (err2.message === 'Unable to make data connection') {
-            console.log('未知获取错误');
+          if (err2.message === "Unable to make data connection") {
+            console.log("未知获取错误");
 
             return resolve();
           }
@@ -73,7 +73,7 @@ export const putFile = (
  */
 // eslint-disable-next-line max-lines-per-function
 export const putFolder = (
-  localDirectory = './',
+  localDirectory = "./",
   onlineDirectory = localDirectory
 ): Promise<void> => {
   console.log(`开始上传 ${onlineDirectory} 目录文件`);

@@ -1,13 +1,13 @@
-import Client from 'ftp';
-import client from './ftp-client';
-import fs from 'fs';
+import Client from "ftp";
+import client from "./ftp-client";
+import fs from "fs";
 
 /** 读取当前路径 */
 export const pwd = (): Promise<string> =>
   new Promise((resolve, reject) => {
     client.pwd((err, currentpath) => {
       if (err) {
-        console.error('列出当前目录出错:', err);
+        console.error("列出当前目录出错:", err);
         return reject(err);
       }
 
@@ -50,32 +50,40 @@ export const pathAction = <T = void>(
 ): Promise<T> =>
   // 读取当前目录
   pwd().then((currentpath) => {
-    console.log(`当前目录为${currentpath}`);
+    console.log(`当前目录为 ${currentpath}`);
 
     if (actionPath === currentpath) {
-      console.log('无需切换目录');
+      console.log("无需切换目录");
 
       return new Promise(action);
     }
 
     // 切换目录
-    return new Promise((resolve, reject) =>
-      cwd(actionPath).then(() => {
-        console.log(`切换到 ${actionPath} 目录`);
+    return cwd(actionPath).then(() => {
+      console.log(`切换到 ${actionPath} 目录`);
 
-        return new Promise(action)
-          .then((...args) => {
-            // 切换回当前目录
-            console.log('任务完成');
-            return cwd(currentpath).then(() => resolve(...args));
-          })
-          .catch((err) => {
-            console.warn('任务失败，尝试切换回源目录');
+      return new Promise(action)
+        .then((value) => {
+          // 切换回当前目录
+          console.log("任务完成");
+          return cwd(currentpath).then(
+            () =>
+              new Promise<T>((resolve) => {
+                resolve(value);
+              })
+          );
+        })
+        .catch((err) => {
+          console.warn("任务失败，尝试切换回源目录");
 
-            return cwd(currentpath).then(() => reject(err));
-          });
-      })
-    );
+          return cwd(currentpath).then(
+            () =>
+              new Promise((_resolve, reject) => {
+                reject(err);
+              })
+          );
+        });
+    });
   });
 
 /**
