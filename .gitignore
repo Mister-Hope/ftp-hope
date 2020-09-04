@@ -1,6 +1,7 @@
 node_modules/
 
 lib/
+src/connection.ts
 types/
 
 tests/loginDetail.json
