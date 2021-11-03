@@ -1,35 +1,13 @@
-import {
-  cwd,
-  listOnlineDir,
-  markDirExist,
-  markOnlineDirExist,
-  pwd
-} from "./ftp-dir";
-import { getFile, getFolder } from "./ftp-get";
-import { putFile, putFolder } from "./ftp-put";
-import client from "./ftp-client";
+import ftpClient from "./ftp-client";
 
-export = {
-  client,
+export const client = ftpClient;
+
+export {
   cwd,
-  default: {
-    client,
-    cwd,
-    getFile,
-    getFolder,
-    listOnlineDir,
-    markDirExist,
-    markOnlineDirExist,
-    putFile,
-    putFolder,
-    pwd
-  },
-  getFile,
-  getFolder,
   listOnlineDir,
   markDirExist,
   markOnlineDirExist,
-  putFile,
-  putFolder,
-  pwd
-};
+  pwd,
+} from "./ftp-dir";
+export { getFile, getFolder } from "./ftp-get";
+export { putFile, putFolder } from "./ftp-put";

@@ -7,8 +7,8 @@ export const pwd = (): Promise<string> =>
   new Promise((resolve, reject) => {
     client.pwd((err, currentpath) => {
       if (err) {
-        console.error("列出当前目录出错:", err);
-        return reject(err);
+        console.error("列出当前目录出错:", err.message);
+        return reject(err.message);
       }
 
       console.log(`当前目录为 ${currentpath}`);
@@ -45,7 +45,7 @@ export const pathAction = <T = void>(
   actionPath: string,
   action: (
     resolve: (value?: T | PromiseLike<T>) => void,
-    reject: (reason?: any) => void
+    reject: (reason?: string) => void
   ) => void
 ): Promise<T> =>
   // 读取当前目录

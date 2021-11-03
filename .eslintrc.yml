@@ -1,12 +1,17 @@
 root: true
 
 env:
-  es6: true
   node: true
+  es6: true
+
+ignorePatterns:
+  - dist/
+  - node_modules/
+  - typings/
 
 extends:
   - eslint:recommended
-  - plugin:prettier/recommended
+  - prettier
 
 plugins:
   - prettier
@@ -19,80 +24,27 @@ rules:
     - warn
     - max: 25
 
-  capitalized-comments:
-    - off
-
   curly:
     - error
     - multi
-
-  function-call-argument-newline:
-    - error
-    - consistent
-
-  global-require:
-    - off
-
-  guard-for-in:
-    - off
 
   id-length:
     - error
     - min: 2
       exceptions:
+        - a
+        - b
+        - h
         - i
         - j
-        - x
-        - y
-
-  implicit-arrow-linebreak:
-    - off
+        - k
 
   indent:
     - off
 
-  init-declarations:
-    - off
-
-  line-comment-position:
-    - off
-
-  max-lines:
-    - warn
-    - 500
-
-  max-lines-per-function:
-    - warn
-    - 80
-
   max-statements:
     - warn
     - 25
-
-  new-cap:
-    - off
-
-  nonblock-statement-body-position:
-    - error
-    - any
-
-  no-console:
-    - off
-
-  no-debugger:
-    - off
-
-  no-inline-comments:
-    - off
-
-  no-magic-numbers:
-    - off
-
-  no-multi-assign:
-    - off
-
-  no-nested-ternary:
-    - off
 
   no-param-reassign:
     - error
@@ -101,22 +53,6 @@ rules:
   no-plusplus:
     - error
     - allowForLoopAfterthoughts: true
-
-  no-sync:
-    - off
-
-  no-ternary:
-    - off
-
-  no-underscore-dangle:
-    - error
-    - allowAfterThis: true
-
-  no-undefined:
-    - off
-
-  no-unused-vars:
-    - off
 
   no-warning-comments:
     - warn
@@ -129,13 +65,27 @@ rules:
     - object: true
       array: false
 
+  quotes:
+    - off
+
+  radix:
+    - error
+    - as-needed
+
 overrides:
+  - files:
+      - rollup.config.js
+
+    parserOptions:
+      sourceType: module
+
   - files:
       - "*.ts"
 
     extends:
       - plugin:@typescript-eslint/eslint-recommended
       - plugin:@typescript-eslint/recommended
+      - plugin:@typescript-eslint/recommended-requiring-type-checking
       - prettier/@typescript-eslint
 
     plugins:
@@ -145,6 +95,7 @@ overrides:
       parser: "@typescript-eslint/parser"
       project:
         - "./tsconfig.json"
+        - "./tsconfig.test.json"
 
     rules:
       "@typescript-eslint/explicit-function-return-type":
@@ -171,24 +122,20 @@ overrides:
             - PascalCase
 
       "@typescript-eslint/no-explicit-any":
-        - off
-        # - warn
-        # - ignoreRestArgs: true
+        - warn
+        - ignoreRestArgs: true
 
       "@typescript-eslint/no-unsafe-member-access":
-        - off
-        # - warn
+        - warn
 
   - files:
-      - "**/test/**/*.spec.js"
-      - "**/test/**/*.spec.ts"
-      - "**/test/**/*.test.js"
-      - "**/test/**/*.test.ts"
+      - "**/__tests__/**/*.spec.{j,t}s?(x)"
 
     env:
-      mocha: true
-      node: true
+      jest: true
 
     rules:
-      id-length: "off"
-      max-lines-per-function: "off"
+      id-length: off
+      max-lines-per-function: off
+      "@typescript-eslint/no-explicit-any": off
+      "@typescript-eslint/no-unsafe-member-access": off

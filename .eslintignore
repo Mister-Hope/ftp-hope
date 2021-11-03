@@ -1,4 +1,0 @@
-lib/*.js
-types/*.d.ts
-
-src/connection.ts

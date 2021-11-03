@@ -1,2 +1,16 @@
+# Github CI
+.github/
+
+# Source Files
 src/
-tests/
+
+# Test Files
+__tests__/
+
+# Config Files
+.eslintrc.yml
+.prettierignore
+*.config.js
+
+# Typescript Config
+tsconfig.*
