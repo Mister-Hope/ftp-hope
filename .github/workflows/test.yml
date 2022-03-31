@@ -14,7 +14,7 @@ jobs:
           persist-credentials: false
 
       - name: restore node_modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         id: node_modules-cache
         with:
           path: |
